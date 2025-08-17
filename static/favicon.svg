@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="blog icon.svg"
+   inkscape:export-filename="blog icon.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title15">baiyinblog icon</title>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="12.734375"
+     inkscape:cx="24.932515"
+     inkscape:cy="19.592638"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient12"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="0"
+         id="stop14" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop13" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="-15.096933 : 5.686707 : 0"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="16 : 5.333333 : 0"
+       inkscape:persp3d-origin="27.660755 : -6.5008277 : 1"
+       id="perspective1" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient12"
+       id="radialGradient14"
+       cx="15.974712"
+       cy="16.462519"
+       fx="15.974712"
+       fy="16.462519"
+       r="16.035612"
+       gradientTransform="matrix(0.41396311,0,0,0.31278888,2.3728137,10.890178)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="图层 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       sodipodi:type="inkscape:box3d"
+       id="g1"
+       style="fill:#000000"
+       inkscape:perspectiveID="#perspective1"
+       inkscape:corner0="1.6854514 : 0.018766795 : 0 : 1"
+       inkscape:corner7="0.75734153 : 0.0055870651 : 0.88330872 : 1">
+      <path
+         sodipodi:type="inkscape:box3dside"
+         id="path6"
+         style="fill:#e9e9ff;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         inkscape:box3dsidetype="11"
+         d="M 16.348548,5.4383849 30.36016,10.716274 v 13.17973 L 16.348548,18.618115 Z"
+         points="30.36016,10.716274 30.36016,23.896004 16.348548,18.618115 16.348548,5.4383849 " />
+      <path
+         sodipodi:type="inkscape:box3dside"
+         id="path1"
+         style="fill:#353564;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         inkscape:box3dsidetype="6"
+         d="m 2.2156081,10.149364 v 13.17973 L 16.348548,18.618115 V 5.4383849 Z"
+         points="2.2156081,23.329094 16.348548,18.618115 16.348548,5.4383849 2.2156081,10.149364 " />
+      <path
+         sodipodi:type="inkscape:box3dside"
+         id="path5"
+         style="fill:#afafde;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         inkscape:box3dsidetype="13"
+         d="M 2.2156081,23.329094 16.227221,28.606983 30.36016,23.896004 16.348548,18.618115 Z"
+         points="16.227221,28.606983 30.36016,23.896004 16.348548,18.618115 2.2156081,23.329094 " />
+      <path
+         sodipodi:type="inkscape:box3dside"
+         id="path2"
+         style="fill:#4d4d9f;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         inkscape:box3dsidetype="5"
+         d="M 2.2156081,10.149364 16.227221,15.427253 30.36016,10.716274 16.348548,5.4383849 Z"
+         points="16.227221,15.427253 30.36016,10.716274 16.348548,5.4383849 2.2156081,10.149364 " />
+      <path
+         sodipodi:type="inkscape:box3dside"
+         id="path4"
+         style="fill:#d7d7ff;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         inkscape:box3dsidetype="14"
+         d="m 16.227221,15.427253 v 13.17973 L 30.36016,23.896004 v -13.17973 z"
+         points="16.227221,28.606983 30.36016,23.896004 30.36016,10.716274 16.227221,15.427253 " />
+      <path
+         sodipodi:type="inkscape:box3dside"
+         id="path3"
+         style="fill:#8686bf;fill-rule:evenodd;stroke:none;stroke-linejoin:round"
+         inkscape:box3dsidetype="3"
+         d="m 2.2156081,10.149364 14.0116129,5.277889 v 13.17973 L 2.2156081,23.329094 Z"
+         points="16.227221,15.427253 16.227221,28.606983 2.2156081,23.329094 2.2156081,10.149364 " />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:4.46468px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:url(#radialGradient14);stroke-width:0.372057"
+       x="8.9792147"
+       y="14.775519"
+       id="text6"
+       transform="skewY(22.254304)"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         x="8.9792147"
+         y="14.775519"
+         style="text-align:center;text-anchor:middle;fill:url(#radialGradient14);fill-opacity:1;stroke-width:0.372057">白影</tspan><tspan
+         sodipodi:role="line"
+         x="8.9792147"
+         y="20.468815"
+         id="tspan7"
+         style="text-align:center;text-anchor:middle;fill:url(#radialGradient14);fill-opacity:1;stroke-width:0.372057">博客栈</tspan></text>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text6"
+       id="use14"
+       transform="matrix(1,-0.76951676,0,1,14.213497,7.9355481)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text6"
+       id="use15"
+       transform="matrix(1.1666538,0.18327616,-1.144852,0.37287184,29.504243,1.3314904)" />
+  </g>
+  <metadata
+     id="metadata15">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>baiyinblog icon</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
