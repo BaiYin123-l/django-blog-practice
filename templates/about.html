@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+    <table class="table table-hover table-bordered">
+        <thead>
+        <tr class="text-center">
+            <th scope="col">依赖名</th>
+            <th>作者</th>
+            <th>许可类型</th>
+            <th>仓库</th>
+        </tr>
+        </thead>
+        {% for license in licenses %}
+            <tr>
+                <td>{{ license.Name }}</td>
+                <td>{{ license.Author }}</td>
+                <td>{{ license.License }}</td>
+                <td><a href="{{ URL }}" target="_blank" class="btn btn-outline-primary">访问</a></td>
+            </tr>
+        {% endfor %}
+
+    </table>
+{% endblock %}
