@@ -18,3 +18,48 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+    tags = models.ManyToManyField(Tag)
+
+    def __str__(self):
+        return self.title
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.content
+
+
+class LikePost(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.status
+
+
+class LikeComment(models.Model):
+    Comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.status

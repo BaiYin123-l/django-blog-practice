@@ -16,9 +16,16 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 #  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 
+import sys
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
+
+#  Copyright (c) 2025. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+#  Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+#  Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+#  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+#  Vestibulum commodo. Ut rhoncus gravida arcu.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -154,3 +161,64 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# loggings
+import os
+import logging
+import logging.config
+
+# 日志目录路径
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+
+# 检查日志目录是否存在，如果不存在则创建
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(LOG_DIR, "django.log"),  # 使用 LOG_DIR
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": 5,
+            "formatter": "verbose",
+        },
+        "memory": {
+            "level": "DEBUG",
+            "class": "logging.handlers.MemoryHandler",
+            "capacity": 1024,  # 1024 log entries
+            "flushLevel": logging.ERROR,
+            "target": "file",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "memory"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "core": {
+            "handlers": ["console", "memory"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}

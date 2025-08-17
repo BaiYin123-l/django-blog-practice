@@ -3,3 +3,5 @@
 /db.sqlite3
 /core/migrations/
 !/core/migrations/__init__.py
+*.log
+.env

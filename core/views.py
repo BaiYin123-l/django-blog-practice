@@ -24,7 +24,11 @@ class IndexView(BaseView):
         return render(request, "index.html", context=self.context)
 
 
+from json import load
+
+
 class AboutView(BaseView):
     def get(self, request):
         context = self.context
+        context["licenses"] = load(open("licenses.json", encoding="utf-8"))
         return render(request, "about.html", context=context)
