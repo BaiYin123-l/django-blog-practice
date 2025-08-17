@@ -13,4 +13,5 @@ $(document).ready(function(){
     }else if(check === "/about/"){
         document.querySelector("body > div > header > ul > li:nth-child(2) > a").classList.add(is_active_flag);
     }
+
 })
