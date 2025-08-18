@@ -4,13 +4,13 @@
 #  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 
 
 # Create your models here.
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Account(AbstractUser):
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(
         upload_to="avatar", null=True, blank=True, default="avatar/default.svg"
     )
@@ -30,7 +30,7 @@ class Tag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    author = models.ForeignKey(Account, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
 
@@ -40,7 +40,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    author = models.ForeignKey(Account, on_delete=models.CASCADE)
     content = models.TextField()
 
     def __str__(self):
@@ -49,7 +49,7 @@ class Comment(models.Model):
 
 class LikePost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    author = models.ForeignKey(Account, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
 
     def __str__(self):
@@ -58,7 +58,7 @@ class LikePost(models.Model):
 
 class LikeComment(models.Model):
     Comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    author = models.ForeignKey(Account, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
 
     def __str__(self):

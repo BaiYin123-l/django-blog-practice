@@ -5,9 +5,12 @@
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 from django.urls import path
 
-from core.views import AboutView, IndexView
+from core.views import AboutView, IndexView, RegisterView, LoginView, logout_view
 
 urlpatterns = [
-    path('', IndexView.as_view(), name='index'),
-    path('about/', AboutView.as_view(), name='about'),
+    path("", IndexView.as_view(), name="index"),
+    path("about/", AboutView.as_view(), name="about"),
+    path("register/", RegisterView.as_view(), name="register"),
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", logout_view, name="logout"),
 ]

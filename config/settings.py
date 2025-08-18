@@ -17,6 +17,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 
 import sys
+import time
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
@@ -40,7 +41,7 @@ from dotenv import load_dotenv
 
 load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
+if SECRET_KEY == "":
     SECRET_KEY = get_random_secret_key()
     with open(BASE_DIR / ".env", "w", encoding="utf-8") as f:
         f.write(f'SECRET_KEY="{SECRET_KEY}"\n')
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core.apps.CoreConfig",
+    "captcha",
 ]
 
 MIDDLEWARE = [
@@ -99,11 +101,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME"),  # 数据库名称
-        "USER": os.getenv("DB_USER"),  # 数据库用户名
-        "PASSWORD": os.getenv("DB_PASSWORD"),  # 数据库密码
-        "HOST": os.getenv("DB_HOST"),  # 数据库主机
-        "PORT": os.getenv("DB_PORT"),  # 数据库端口
+        "NAME": os.getenv("NAME"),  # 数据库名称
+        "USER": os.getenv("USER"),  # 数据库用户名
+        "PASSWORD": os.getenv("PASSWORD"),  # 数据库密码
+        "HOST": os.getenv("HOST"),  # 数据库主机
+        "PORT": os.getenv("PORT"),  # 数据库端口
     },
 }
 
@@ -156,17 +158,17 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = "core.Account"
+
 # loggings
 import os
 import logging
 import logging.config
 
 # 日志目录路径
-LOG_DIR = os.path.join(BASE_DIR, "logs")
-
-# 检查日志目录是否存在，如果不存在则创建
-if not os.path.exists(LOG_DIR):
-    os.makedirs(LOG_DIR)
+# 定义日志目录
+LOG_DIR = "D:/dev/django-blog-practice/logs"
+os.makedirs(LOG_DIR, exist_ok=True)  # 确保日志目录存在
 
 LOGGING = {
     "version": 1,
@@ -190,29 +192,28 @@ LOGGING = {
         "file": {
             "level": "INFO",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": os.path.join(LOG_DIR, "django.log"),  # 使用 LOG_DIR
+            "filename": os.path.join(
+                LOG_DIR, f"django-{time.strftime('%Y-%m-%d')}.log"
+            ),
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
             "formatter": "verbose",
         },
-        "memory": {
-            "level": "DEBUG",
-            "class": "logging.handlers.MemoryHandler",
-            "capacity": 1024,  # 1024 log entries
-            "flushLevel": logging.ERROR,
-            "target": "file",
-        },
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "memory"],
-            "level": "DEBUG",
+            "handlers": ["console", "file"],
+            "level": "INFO",
             "propagate": True,
         },
         "core": {
-            "handlers": ["console", "memory"],
-            "level": "DEBUG",
+            "handlers": ["console", "file"],
+            "level": "INFO",
             "propagate": False,
         },
     },
 }
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/login/"
