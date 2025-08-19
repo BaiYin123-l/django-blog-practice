@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    <main>
+        <table>
+            <tr>
+                <td>修改密码</td>
+                <td>
+                    <form method="post" enctype="multipart/form-data"
+                          action="{% url 'SettingsHandle' mode='password' %}" class="settings-form" data-state="view">
+                        {% csrf_token %}
+                        <input type="password" name="password" placeholder="新密码" class="input-field" disabled>
+                        <button type="button" class="toggle-btn">修改</button>
+                        <button type="submit" class="submit-btn" hidden>保存</button>
+                    </form>
+                    {% if password_message %}
+                        <p>{{ password_message }}</p>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>更换头像</td>
+                <td>
+                    <form method="post" enctype="multipart/form-data" action="{% url 'SettingsHandle' mode='avatar' %}"
+                          class="settings-form" data-state="view">
+                        {% csrf_token %}
+                        <input type="file" name="avatar" class="input-field" disabled>
+                        <button type="button" class="toggle-btn">修改</button>
+                        <button type="submit" class="submit-btn" hidden>保存</button>
+                    </form>
+                    {% if avatar_message %}
+                        <p>{{ avatar_message }}</p>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>更换个人签名</td>
+                <td>
+                    <form method="post" enctype="multipart/form-data"
+                          action="{% url 'SettingsHandle' mode='signature' %}" class="settings-form" data-state="view">
+                        {% csrf_token %}
+                        <input type="text" name="signature" placeholder="个人签名" class="input-field" disabled>
+                        <button type="button" class="toggle-btn">修改</button>
+                        <button type="submit" class="submit-btn" hidden>保存</button>
+                    </form>
+                    {% if signature_message %}
+                        <p>{{ signature_message }}</p>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        <script>
+            document.querySelectorAll('.toggle-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const form = this.closest('form');
+                    const inputField = form.querySelector('.input-field');
+                    const submitBtn = form.querySelector('.submit-btn');
+                    const toggleBtn = form.querySelector('.toggle-btn');
+
+                    if (form.dataset.state === 'view') {
+                        inputField.disabled = false;
+                        submitBtn.hidden = false;
+                        toggleBtn.textContent = '取消';
+                        form.dataset.state = 'edit';
+                    } else {
+                        inputField.disabled = true;
+                        submitBtn.hidden = true;
+                        toggleBtn.textContent = '修改';
+                        form.dataset.state = 'view';
+                    }
+                });
+            });
+        </script>
+    </main>
+{% endblock %}

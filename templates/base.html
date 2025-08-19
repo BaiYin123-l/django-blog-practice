@@ -38,7 +38,7 @@
                     data-popper-placement="bottom-start">
                     <li><a class="dropdown-item" href="#"
                     >新项目...</a></li>
-                    <li><a class="dropdown-item" href="#"
+                    <li><a class="dropdown-item" href="{% url 'settings' %}"
                     >设置</a></li>
                     <li>
                         <hr class="dropdown-divider">
@@ -54,8 +54,6 @@
                 <a class="btn btn-primary" href="{% url "register" %}">注册</a>
             </div>
         {% endif %}
-
-
     </header>
 
     {% block main %}

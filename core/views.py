@@ -8,9 +8,9 @@ from json import load
 from time import strftime
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
-from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.views import View
 
 from .forms import *
@@ -97,6 +97,16 @@ class LoginView(BaseView):
             return render(request, "login.html", context=context)
 
 
+def username_exists(username):
+    """检查用户名是否存在"""
+    return Account.objects.filter(username=username).exists()
+
+
+def passwords_match(password1, password2):
+    """检查两次输入的密码是否一致"""
+    return password1 == password2
+
+
 class RegisterView(BaseView):
     """用户注册视图"""
 
@@ -110,9 +120,9 @@ class RegisterView(BaseView):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            if self.username_exists(data["username"]):
+            if username_exists(data["username"]):
                 form.add_error("username", "用户名已存在")
-            elif not self.passwords_match(data["password"], data["password1"]):
+            elif not passwords_match(data["password"], data["password1"]):
                 form.add_error("password1", "两次输入的密码不一致")
             else:
                 new_user = Account.objects.create_user(
@@ -127,15 +137,52 @@ class RegisterView(BaseView):
         context["form"] = form
         return render(request, "register.html", context=context)
 
-    def username_exists(self, username):
-        """检查用户名是否存在"""
-        return Account.objects.filter(username=username).exists()
-
-    def passwords_match(self, password1, password2):
-        """检查两次输入的密码是否一致"""
-        return password1 == password2
-
 
 def logout_view(request):
     logout(request)
     return redirect("index")
+
+
+class SettingsView(BaseView):
+    def get(self, request):
+        context = self.context
+        return render(request, "settings.html", context=context)
+
+
+class SettingsHandleView(BaseView):
+    def post(self, request, mode):
+        if mode == "password":
+            return self.handle_password(request)
+        elif mode == "avatar":
+            return self.handle_avatar(request)
+        elif mode == "signature":
+            return self.handle_signature(request)
+        else:
+            return HttpResponse("Invalid mode", status=400)
+
+    def handle_password(self, request):
+        password = request.POST.get("password")
+        if password:
+            # 保存密码逻辑
+            self.context["password_message"] = "Password updated successfully"
+        else:
+            self.context["password_message"] = "Password was not changed"
+        return render(request, "settings.html", context=self.context)
+
+    def handle_avatar(self, request):
+        avatar = request.FILES.get("avatar")
+        if avatar:
+            # 保存头像逻辑
+            self.context["avatar_message"] = "Avatar updated successfully"
+        else:
+            self.context["avatar_message"] = "Avatar was not changed"
+        return render(request, "settings.html", context=self.context)
+
+    def handle_signature(self, request):
+        signature = request.POST.get("signature")
+        if signature:
+            # 保存个人签名逻辑
+            self.context["signature_message"] = "Signature updated successfully"
+        else:
+            self.context["signature_message"] = "Signature was not changed"
+        return render(request, "settings.html", context=self.context)

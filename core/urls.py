@@ -5,7 +5,9 @@
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 from django.urls import path
 
-from core.views import AboutView, IndexView, RegisterView, LoginView, logout_view
+from core.views import (
+    AboutView , IndexView , LoginView , RegisterView , SettingsHandleView , SettingsView , logout_view ,
+    )
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
@@ -13,4 +15,6 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", logout_view, name="logout"),
+    path("settings/", SettingsView.as_view(), name="settings"),
+    path("settings/<str:mode>/", SettingsHandleView.as_view(), name="SettingsHandle"),
 ]

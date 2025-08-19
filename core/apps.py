@@ -9,8 +9,6 @@ from django.utils.autoreload import autoreload_started
 
 
 class CoreConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'core'
     default_auto_field = "django.db.models.BigAutoField"
     name = "core"
 
