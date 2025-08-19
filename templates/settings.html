@@ -10,7 +10,8 @@
                     <form method="post" enctype="multipart/form-data"
                           action="{% url 'SettingsHandle' mode='password' %}" class="settings-form" data-state="view">
                         {% csrf_token %}
-                        <input type="password" name="password" placeholder="新密码" class="input-field" disabled>
+                        <input type="password" name="password1" placeholder="新密码" class="input-field" disabled>
+                        <input type="password" name="password2" placeholder="确认新密码" class="input-field" disabled>
                         <button type="button" class="toggle-btn">修改</button>
                         <button type="submit" class="submit-btn" hidden>保存</button>
                     </form>
@@ -35,6 +36,13 @@
                 </td>
             </tr>
             <tr>
+                <td>当前个性签名
+                </td>
+                <td>
+                    {{ user.bio }}
+                </td>
+            </tr>
+            <tr>
                 <td>更换个人签名</td>
                 <td>
                     <form method="post" enctype="multipart/form-data"
@@ -54,17 +62,21 @@
             document.querySelectorAll('.toggle-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const form = this.closest('form');
-                    const inputField = form.querySelector('.input-field');
+                    const inputFields = form.getElementsByClassName('input-field'); // 移除点号
                     const submitBtn = form.querySelector('.submit-btn');
                     const toggleBtn = form.querySelector('.toggle-btn');
 
                     if (form.dataset.state === 'view') {
-                        inputField.disabled = false;
+                        Array.from(inputFields).forEach(inputField => { // 使用 Array.from 将 HTMLCollection 转换为数组
+                            inputField.disabled = false;
+                        });
                         submitBtn.hidden = false;
                         toggleBtn.textContent = '取消';
                         form.dataset.state = 'edit';
                     } else {
-                        inputField.disabled = true;
+                        Array.from(inputFields).forEach(inputField => { // 使用 Array.from 将 HTMLCollection 转换为数组
+                            inputField.disabled = true;
+                        });
                         submitBtn.hidden = true;
                         toggleBtn.textContent = '修改';
                         form.dataset.state = 'view';

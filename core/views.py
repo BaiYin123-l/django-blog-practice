@@ -8,7 +8,7 @@ from json import load
 from time import strftime
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
@@ -161,10 +161,19 @@ class SettingsHandleView(BaseView):
             return HttpResponse("Invalid mode", status=400)
 
     def handle_password(self, request):
-        password = request.POST.get("password")
-        if password:
-            # 保存密码逻辑
-            self.context["password_message"] = "Password updated successfully"
+        password1, password2 = request.POST.get("password1"), request.POST.get(
+            "password2"
+        )
+        if password1 or password2:
+            if passwords_match(password1, password2):
+                request.user.set_password(password1)
+                request.user.save()
+                update_session_auth_hash(request, request.user)
+                self.context["password_message"] = "Password updated successfully"
+                return render(request, "settings.html", context=self.context)
+            else:
+                self.context["password_message"] = "Password did not match"
+                return render(request, "settings.html", context=self.context)
         else:
             self.context["password_message"] = "Password was not changed"
         return render(request, "settings.html", context=self.context)
@@ -173,6 +182,8 @@ class SettingsHandleView(BaseView):
         avatar = request.FILES.get("avatar")
         if avatar:
             # 保存头像逻辑
+            request.user.avatar = avatar
+            request.user.save()
             self.context["avatar_message"] = "Avatar updated successfully"
         else:
             self.context["avatar_message"] = "Avatar was not changed"
@@ -182,6 +193,8 @@ class SettingsHandleView(BaseView):
         signature = request.POST.get("signature")
         if signature:
             # 保存个人签名逻辑
+            request.user.bio = signature
+            request.user.save()
             self.context["signature_message"] = "Signature updated successfully"
         else:
             self.context["signature_message"] = "Signature was not changed"

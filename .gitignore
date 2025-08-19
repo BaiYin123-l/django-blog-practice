@@ -5,3 +5,5 @@
 !/core/migrations/__init__.py
 *.log
 .env
+/media/avatar/
+!/media/avatar/default.svg

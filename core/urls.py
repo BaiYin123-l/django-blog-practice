@@ -6,7 +6,13 @@
 from django.urls import path
 
 from core.views import (
-    AboutView , IndexView , LoginView , RegisterView , SettingsHandleView , SettingsView , logout_view ,
+    AboutView ,
+    IndexView ,
+    LoginView ,
+    RegisterView ,
+    SettingsHandleView ,
+    SettingsView ,
+    logout_view ,
     )
 
 urlpatterns = [

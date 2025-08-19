@@ -4,7 +4,7 @@
 #  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser , User
 from django.db import models
 
 
@@ -17,7 +17,7 @@ class Account(AbstractUser):
     bio = models.TextField(null=True, blank=True, max_length=500, default="No bio.")
 
     def __str__(self):
-        return self.user.username
+        return self.username
 
 
 class Tag(models.Model):
