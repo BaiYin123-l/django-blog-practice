@@ -3,18 +3,21 @@
 #  Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
 #  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
-
+import random
 from json import load
 from time import strftime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import View
 
 from .forms import *
-from .models import Account
+from .models import *
 
 
 # Create your views here.
@@ -29,16 +32,62 @@ class BaseView(View):
 
 
 class IndexView(BaseView):
-    """ """
+    """首页视图，实现随机推荐功能"""
 
     def get(self, request):
         """
-
-        :param request:
-        :return:
+        首页视图的 GET 方法，实现随机推荐帖子
+        :param request: 请求对象
+        :return: 渲染后的首页
         """
-        return render(request, "index.html", context=self.context)
+        context = self.context
 
+        # 获取所有帖子
+        posts = Post.objects.all()
+
+        # 计算每个帖子的权重并打乱顺序
+        weighted_posts = self.get_weighted_posts(posts)
+
+        # 将打乱后的帖子列表添加到上下文中
+        context["posts"] = weighted_posts
+
+        return render(request, "index.html", context=context)
+
+    @staticmethod
+    def get_weighted_posts(posts, alpha=0.5, beta=0.5):
+        """
+        计算每个帖子的权重并打乱顺序
+        :param posts: Post 对象列表
+        :param alpha: 时间权重系数
+        :param beta: 点赞权重系数
+        :return: 打乱后的帖子列表
+        """
+        current_time = timezone.now()
+        weighted_posts = []
+
+        for post in posts:
+            # 计算时间权重
+            time_diff = (current_time - post.created_at).days + 1  # 防止除以0
+            time_weight = 1 / time_diff
+
+            # 计算点赞权重
+            like_weight = post.like_count
+
+            # 计算总权重
+            total_weight = alpha * time_weight + beta * like_weight
+
+            weighted_posts.append((post, total_weight))
+
+        # 根据权重打乱帖子顺序
+        # 使用 random.sample 按权重随机选择帖子
+        posts_only = [post for post, weight in weighted_posts]
+        weights = [weight for post, weight in weighted_posts]
+
+        # 随机选择帖子，权重高的帖子有更高的概率被选中
+        # 使用 random.sample 确保不重复
+        shuffled_posts = random.sample(posts_only, k=len(posts_only))
+
+        return shuffled_posts
 
 class AboutView(BaseView):
     """ """
@@ -199,3 +248,53 @@ class SettingsHandleView(BaseView):
         else:
             self.context["signature_message"] = "Signature was not changed"
         return render(request, "settings.html", context=self.context)
+
+
+def deregister(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            user = request.user
+            logout(request)
+            user.delete()
+            return redirect("index")
+        else:
+            messages.info(request, "未登录")
+            return redirect("index")
+
+
+@method_decorator(login_required, name="dispatch")
+class PostEditView(BaseView):
+    def get(self, request, post_id=None):
+        context = self.context
+        if post_id:
+            post = Post.objects.get(pk=post_id)
+            form = PostForm(instance=post)
+        else:
+            form = PostForm()
+        context["form"] = form
+        return render(request, "edit.html", context=context)
+
+    def post(self, request, post_id=None):
+        if post_id:
+            post = Post.objects.get(pk=post_id)
+            form = PostForm(request.POST, instance=post)
+        else:
+            form = PostForm(request.POST)
+
+        if form.is_valid():
+            post = form.save(commit=False)  # 不立即保存到数据库
+            post.author = request.user  # 设置当前登录用户为作者
+            post.save()  # 保存到数据库
+            form.save_m2m()  # 保存多对多字段
+            return redirect("index")  # 替换为成功后的跳转地址
+        else:
+            context = self.context
+            context["form"] = form
+            return render(request, "edit.html", context=context)
+
+class PostView(BaseView):
+    def get(self, request, post_id):
+        context = self.context
+        post = Post.objects.get(id=post_id)
+        context["post"] = post
+        return render(request, "read.html", context=context)

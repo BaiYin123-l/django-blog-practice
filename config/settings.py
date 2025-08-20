@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "core.apps.CoreConfig",
     "captcha",
+    "django_ckeditor_5",
 ]
 
 MIDDLEWARE = [
@@ -145,7 +146,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
-# STATIC_ROOT = BASE_DIR / 'static'
+# STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -167,7 +168,7 @@ import logging.config
 
 # 日志目录路径
 # 定义日志目录
-LOG_DIR = "D:/dev/django-blog-practice/logs"
+LOG_DIR = BASE_DIR / "logs"
 os.makedirs(LOG_DIR, exist_ok=True)  # 确保日志目录存在
 
 LOGGING = {
@@ -217,3 +218,24 @@ LOGGING = {
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
+
+# settings.py
+
+# 配置 CKEDITOR_UPLOAD_PATH
+CKEDITOR_5_CONFIGS = {
+    "default": {
+        "toolbar": [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "blockQuote",
+        ],
+        "simpleUpload": {
+            "uploadUrl": "/upload",
+        },
+    },
+}

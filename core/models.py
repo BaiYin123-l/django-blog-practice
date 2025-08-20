@@ -4,8 +4,9 @@
 #  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 
-from django.contrib.auth.models import AbstractUser , User
+from django.contrib.auth.models import AbstractUser, User
 from django.db import models
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 # Create your models here.
@@ -27,24 +28,33 @@ class Tag(models.Model):
         return self.name
 
 
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+
+
+@receiver(post_migrate)
+def create_default_tags(sender, **kwargs):
+    if sender.name == "core":  # 替换为你的应用名称
+        if Tag.objects.count() == 0:
+            print(1)
+            Tag.objects.create(name="live")
+            Tag.objects.create(name="learn")
+
+
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    content = models.TextField()
+    content = CKEditor5Field()
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def like_count(self):
+        return self.likepost_set.filter(status=True).count()
 
     def __str__(self):
         return self.title
-
-
-class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(Account, on_delete=models.CASCADE)
-    content = models.TextField()
-
-    def __str__(self):
-        return self.content
 
 
 class LikePost(models.Model):
@@ -54,6 +64,15 @@ class LikePost(models.Model):
 
     def __str__(self):
         return self.status
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(Account, on_delete=models.CASCADE)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.content
 
 
 class LikeComment(models.Model):

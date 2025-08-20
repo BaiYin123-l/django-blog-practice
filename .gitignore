@@ -7,3 +7,4 @@
 .env
 /media/avatar/
 !/media/avatar/default.svg
+/clean.txt
