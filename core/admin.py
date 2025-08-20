@@ -7,6 +7,7 @@ from django.contrib import admin
 
 # Register your models here.
 from core.models import Post, Account, Comment, LikePost, LikeComment
+from core.models import Tag
 
 
 @admin.register(Post)
@@ -27,3 +28,7 @@ class LikePostAdmin(admin.ModelAdmin): ...
 
 @admin.register(LikeComment)
 class LikeCommentAdmin(admin.ModelAdmin): ...
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin): ...

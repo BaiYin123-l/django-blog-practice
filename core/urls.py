@@ -5,15 +5,7 @@
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
 from django.urls import path
 
-from core.views import (
-    AboutView ,
-    IndexView ,
-    LoginView ,
-    RegisterView ,
-    SettingsHandleView ,
-    SettingsView ,
-    logout_view ,
-    )
+from .views import *
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
@@ -23,4 +15,7 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path("settings/", SettingsView.as_view(), name="settings"),
     path("settings/<str:mode>/", SettingsHandleView.as_view(), name="SettingsHandle"),
+    path("deregister/", deregister, name="deregister"),
+    path("post/edit", PostEditView.as_view(), name="post-edit"),
+    path("post/<int:post_id>/", PostView.as_view(), name="post"),
 ]

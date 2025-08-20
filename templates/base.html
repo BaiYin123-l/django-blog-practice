@@ -16,6 +16,9 @@
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.svg' %}">
     <link rel="license" href="{% static 'LICENSE' %}">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
+    <script src="{% static 'django_ckeditor_5/dist/translations/zh-cn.js' %}"></script>
 </head>
 <body>
 <div class="container">
@@ -36,8 +39,8 @@
                 <ul class="dropdown-menu text-small"
                     style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 34px);"
                     data-popper-placement="bottom-start">
-                    <li><a class="dropdown-item" href="#"
-                    >新项目...</a></li>
+                    <li><a class="dropdown-item" href="{% url 'post-edit' %}"
+                    >新博文</a></li>
                     <li><a class="dropdown-item" href="{% url 'settings' %}"
                     >设置</a></li>
                     <li>

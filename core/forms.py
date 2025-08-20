@@ -6,6 +6,7 @@
 
 from captcha.fields import CaptchaField
 from django.forms import *
+from django_ckeditor_5.fields import CKEditor5Widget
 
 
 class LoginForm(Form):
@@ -19,3 +20,21 @@ class RegistrationForm(Form):
     password = CharField(required=True, label="密码", widget=PasswordInput)
     password1 = CharField(required=True, label="重复密码", widget=PasswordInput)
     check = CaptchaField(label="验证码", required=True)
+
+
+from django import forms
+from django.forms import ModelForm, ModelMultipleChoiceField
+from .models import Post, Tag
+
+class PostForm(ModelForm):
+    content = forms.CharField(widget=CKEditor5Widget, label="正文")
+    tags = ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="标签",
+        required=False
+    )
+
+    class Meta:
+        model = Post
+        fields = ["title", "tags", "content"]

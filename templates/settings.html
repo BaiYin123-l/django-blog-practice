@@ -57,8 +57,21 @@
                     {% endif %}
                 </td>
             </tr>
+            <tr>
+                <td>注销账号</td>
+                <td>
+                    <form action="{% url 'deregister' %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="deregister-btn" id="deregister-btn">注销账号</button>
+                        <button type="submit" class="submit-btn" id="confirm-btn" style="display: none">确认注销
+                        </button>
+                        <button type="button" class="deregister-btn" id="cancel-btn" style="display: none">取消</button>
+                    </form>
+                </td>
+            </tr>
         </table>
         <script>
+
             document.querySelectorAll('.toggle-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const form = this.closest('form');
@@ -81,6 +94,22 @@
                         toggleBtn.textContent = '修改';
                         form.dataset.state = 'view';
                     }
+                });
+            });
+            $(document).ready(function () {
+                // 页面加载时隐藏取消按钮
+                $('#cancel-btn').hide();
+
+                // 注册按钮点击事件
+                $('#deregister-btn').click(function () {
+                    $('#confirm-btn').show();
+                    $('#cancel-btn').show();
+                });
+
+                // 取消按钮点击事件
+                $('#cancel-btn').click(function () {
+                    $('#confirm-btn').hide();
+                    $('#cancel-btn').hide();
                 });
             });
         </script>
