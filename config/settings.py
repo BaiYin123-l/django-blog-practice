@@ -234,8 +234,17 @@ CKEDITOR_5_CONFIGS = {
             "numberedList",
             "blockQuote",
         ],
+'image': {
+            'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
+            'styles': [
+                {'name': 'Align Left', 'icon': 'align-left', 'attributes': {'class': 'image-style-align-left'}},
+                {'name': 'Align Center', 'icon': 'align-center', 'attributes': {'class': 'image-style-align-center'}},
+                {'name': 'Align Right', 'icon': 'align-right', 'attributes': {'class': 'image-style-align-right'}},
+            ]
+        },
         "simpleUpload": {
             "uploadUrl": "/upload",
         },
     },
 }
+DEFAULT_USER_GROUP = 'Regular User'

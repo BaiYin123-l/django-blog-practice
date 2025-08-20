@@ -27,7 +27,8 @@ from django.forms import ModelForm, ModelMultipleChoiceField
 from .models import Post, Tag
 
 class PostForm(ModelForm):
-    content = forms.CharField(widget=CKEditor5Widget, label="正文")
+    title = CharField(label="标题", required=True)
+    content = forms.CharField(widget=CKEditor5Widget, label="正文", required=True)
     tags = ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
         widget=forms.CheckboxSelectMultiple,

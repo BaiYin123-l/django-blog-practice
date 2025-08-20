@@ -7,11 +7,11 @@ import random
 from json import load
 from time import strftime
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -43,7 +43,7 @@ class IndexView(BaseView):
         context = self.context
 
         # 获取所有帖子
-        posts = Post.objects.all()
+        posts = Post.objects.all().filter(status=1)
 
         # 计算每个帖子的权重并打乱顺序
         weighted_posts = self.get_weighted_posts(posts)
@@ -177,6 +177,9 @@ class RegisterView(BaseView):
                 new_user = Account.objects.create_user(
                     username=data["username"], password=data["password1"]
                 )
+                default_group = Group.objects.get(name=settings.DEFAULT_USER_GROUP)
+                # 将用户添加到默认用户组
+                new_user.groups.add(default_group)
                 login(request, new_user)
                 return redirect("index")
         else:
@@ -298,3 +301,50 @@ class PostView(BaseView):
         post = Post.objects.get(id=post_id)
         context["post"] = post
         return render(request, "read.html", context=context)
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import user_passes_test
+from django.http import JsonResponse
+from .models import Post
+
+def is_reviewer_or_admin(user):
+    """检查用户是否属于审核组或管理组"""
+    return user.groups.filter(name__in=['Reviewer', 'Admin']).exists()
+
+@user_passes_test(is_reviewer_or_admin, login_url='login', redirect_field_name='next')
+def review_view(request):
+    """审核页面视图"""
+    unapproved_posts = Post.objects.filter(status=False)
+    approved_posts = Post.objects.filter(status=True)
+    return render(request, 'review.html', {
+        'unapproved_posts': unapproved_posts,
+        'approved_posts': approved_posts
+    })
+
+def get_post(request, post_id):
+    """通过 AJAX 获取帖子内容"""
+    post = get_object_or_404(Post, id=post_id)
+    return JsonResponse({
+        'title': post.title,
+        'content': post.content,
+        'author': post.author.username,
+        'created_at': post.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    })
+
+def approve_post(request, post_id):
+    """通过 AJAX 审核帖子"""
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        post.status = True
+        post.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)
+
+def unapprove_post(request, post_id):
+    """通过 AJAX 降级审核帖子"""
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        post.status = False
+        post.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)

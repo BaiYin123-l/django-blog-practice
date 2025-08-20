@@ -18,4 +18,8 @@ urlpatterns = [
     path("deregister/", deregister, name="deregister"),
     path("post/edit", PostEditView.as_view(), name="post-edit"),
     path("post/<int:post_id>/", PostView.as_view(), name="post"),
+path('review/', review_view, name='review'),
+    path('get_post/<int:post_id>/', get_post, name='get_post'),
+    path('approve_post/<int:post_id>/', approve_post, name='approve_post'),
+    path('unapprove_post/<int:post_id>/', unapprove_post, name='unapprove_post'),
 ]

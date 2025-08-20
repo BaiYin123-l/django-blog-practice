@@ -10,8 +10,9 @@ $(document).ready(function(){
     let check = location.pathname.split("#")[0];
     if (check === "/"){
         document.querySelector("body > div > header > ul > li:nth-child(1) > a").classList.add(is_active_flag);
-    }else if(check === "/about/"){
+    } else if (check === "/about/") {
         document.querySelector("body > div > header > ul > li:nth-child(2) > a").classList.add(is_active_flag);
+    } else if (check === "/review/") {
+        document.querySelector("body > div > header > ul > li:nth-child(3) > a").classList.add(is_active_flag);
     }
-
 })
