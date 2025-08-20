@@ -299,13 +299,14 @@ class PostView(BaseView):
     def get(self, request, post_id):
         context = self.context
         post = Post.objects.get(id=post_id)
+        is_like = LikePost.objects.filter(post=post, author=request.user).exists()
         context["post"] = post
+        context["is_like"] = is_like
         return render(request, "read.html", context=context)
 
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
-from django.http import JsonResponse
-from .models import Post
+
 
 def is_reviewer_or_admin(user):
     """检查用户是否属于审核组或管理组"""
@@ -348,3 +349,56 @@ def unapprove_post(request, post_id):
         post.save()
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error'}, status=400)
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Post, Comment, LikePost, LikeComment
+
+class LikeView(LoginRequiredMixin, View):
+    def get(self, request, mode, t_id):
+        if mode == 'post':
+            target = get_object_or_404(Post, id=t_id)
+            like_count = target.likepost_set.filter(status=True).count()
+        elif mode == 'comment':
+            target = get_object_or_404(Comment, id=t_id)
+            like_count = target.likecomment_set.filter(status=True).count()
+        else:
+            return JsonResponse({"error": "Invalid mode"}, status=400)
+
+        return JsonResponse({"like_count": like_count})
+
+    def post(self, request, mode, t_id):
+        if mode == 'post':
+            target = get_object_or_404(Post, id=t_id)
+            like_model = LikePost
+        elif mode == 'comment':
+            target = get_object_or_404(Comment, id=t_id)
+            like_model = LikeComment
+        else:
+            return JsonResponse({"error": "Invalid mode"}, status=400)
+
+        if mode == 'post':
+            like, created = like_model.objects.get_or_create(
+                post=target,
+                #comment=target if mode == 'comment' else None,  # 使用小写的字段名
+                author=request.user
+            )
+        elif mode == 'comment':
+            like, created = like_model.objects.get_or_create(
+                author=request.user,
+                comment=target,
+            )
+        else:
+            return JsonResponse({"error": "Invalid mode"}, status=400)
+
+
+        if created:
+            like.status = True
+            like.save()
+            return JsonResponse({"message": "Like added"})
+        else:
+            like.status = not like.status
+            like.save()
+            return JsonResponse({"message": "Like removed" if not like.status else "Like added"})

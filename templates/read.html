@@ -18,6 +18,19 @@
                                 {% endfor %}
                             </p>
                             <div class="card-text">
+
+                                <i class="bi btn like_btn{% if is_like %}
+                                	bi-heart-fill
+                                {% else %}
+                                	bi-heart
+                                {% endif %} " data-mode="post" data-id="{{ post.pk }}"
+                                   data-liked="{{ is_like }}">
+                                    <!-- 这里是带点赞数 -->
+                                    <span class="like-count">0</span>
+                                </i>
+
+                            </div>
+                            <div class="card-text">
                                 {{ post.content|safe }}
                             </div>
                         </div>
@@ -34,5 +47,49 @@
             </div>
         </div>
     </main>
+    <script>
+        $(document).ready(function () {
+            // 获取点赞数
+            function getLikeCount(element) {
+                var mode = $(element).data('mode');
+                var id = $(element).data('id');
+                $.get(`/like/${mode}/${id}/`, function (data) {
+                    $(element).find('.like-count').text(data.like_count);
+                });
+            }
 
+            // 初始化点赞数
+            $('.like_btn').each(function () {
+                getLikeCount(this);
+            });
+
+            // 点赞按钮点击事件
+            $('.like_btn').click(function () {
+                var mode = $(this).data('mode');
+                var id = $(this).data('id');
+                var liked = $(this).data('liked');
+
+                $.ajax({
+                    url: `/like/${mode}/${id}/`,
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (response) {
+                        // alert(response.message);
+                        getLikeCount($(this)); // 更新点赞数
+
+                        // 更新点赞状态
+                        if (response.message === "Like added") {
+                            $(this).addClass('bi-heart-fill').removeClass('bi-heart');
+                            $(this).data('liked', true);
+                        } else {
+                            $(this).addClass('bi-heart').removeClass('bi-heart-fill');
+                            $(this).data('liked', false);
+                        }
+                    }.bind(this)
+                });
+            });
+        });
+    </script>
 {% endblock %}

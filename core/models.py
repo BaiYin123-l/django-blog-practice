@@ -118,7 +118,7 @@ class Comment(models.Model):
 
 
 class LikeComment(models.Model):
-    Comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
 

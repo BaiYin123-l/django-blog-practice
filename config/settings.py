@@ -243,7 +243,7 @@ CKEDITOR_5_CONFIGS = {
             ]
         },
         "simpleUpload": {
-            "uploadUrl": "/upload",
+            "uploadUrl": "/upload/",
         },
     },
 }
