@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+    <main role="main" class="container">
+        <!-- 显示消息提示 -->
+        {% if messages %}
+            <div class="alert alert-warning mt-3 mb-3 mx-auto"
+                 style="max-width: 370px; border: 1px solid #ccc; text-align: center;">
+                <ul class="list-unstyled">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- 注册表单 -->
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">用户注册</h2>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <table class="table table-borderless" style="max-width: 370px;margin:20px auto;">
+                                {{ form.as_table }}
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <button type="submit" class="btn btn-primary">提交</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        $(document).ready(function () {
+            $('.captcha').click(function () {
+                $.getJSON('/captcha/refresh/', function (result) {
+                    $('.captcha').attr('src', result['image_url']);
+                    $('#captcha-key').val(result['key']);
+                });
+            });
+        });
+    </script>
+{% endblock %}

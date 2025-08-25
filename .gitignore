@@ -5,3 +5,6 @@
 !/core/migrations/__init__.py
 *.log
 .env
+/media/
+!/media/avatar/default.svg
+/clean.txt
