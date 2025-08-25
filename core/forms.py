@@ -39,3 +39,8 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ["title", "tags", "content"]
+
+class CommentForm(Form):
+    comment_id = CharField(required=False, label="")
+    comment_input = CharField(required=True, label="")
+

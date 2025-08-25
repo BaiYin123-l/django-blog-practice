@@ -23,4 +23,5 @@ path('review/', review_view, name='review'),
     path('approve_post/<int:post_id>/', approve_post, name='approve_post'),
     path('unapprove_post/<int:post_id>/', unapprove_post, name='unapprove_post'),
     path("like/<str:mode>/<int:t_id>/", LikeView.as_view(), name="like"),
+    path("comment/<int:t_id>/", CommentView.as_view(), name="comment"),
 ]

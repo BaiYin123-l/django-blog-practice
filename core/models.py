@@ -105,7 +105,7 @@ class LikePost(models.Model):
     status = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.status
+        return f"{self.author} like {self.post} {self.status}"
 
 
 class Comment(models.Model):

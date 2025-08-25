@@ -33,9 +33,65 @@
                             <div class="card-text">
                                 {{ post.content|safe }}
                             </div>
-                        </div>
-                        <div class="card-footer text-muted">
-                            <a href="{% url 'index' %}" class="btn btn-outline-primary">返回列表</a>
+                            <hr>
+                            <div class="card-text" id="comments_box">
+                                {% for comment in comments %}
+                                    <div class="row mb-3">
+                                        <!-- left -->
+                                        <div class="col-auto">
+                                            <p class="mb-1">{{ comment.username }}</p>
+                                            <img src="{{ comment.avatar }}" alt="avatar"
+                                                 class="img-fluid rounded-circle"
+                                                 style="width: 50px; height: 50px;">
+                                        </div>
+                                        <!-- right -->
+                                        <div class="col">
+                                            <p class="mb-1">{{ comment.content }}</p>
+                                        </div>
+                                        <!-- bottom -->
+                                        <div class="col-auto align-self-end">
+                                            <i class="bi btn like_btn {% if comment.is_like %}bi-heart-fill{% else %}bi-heart{% endif %}"
+                                               data-mode="comment" data-id="{{ comment.id }}"
+                                               data-liked="{{ comment.is_like }}">
+                                                <!-- 这里是带点赞数 -->
+                                                <span class="like-count">0</span>
+                                            </i>
+                                            <a href="#comment_form" onclick="
+                                                    <!-- 给#comment_form 输入框加 前置内容 @{{ comment.name }} -->
+                                                    $('#id_comment_id').val('{{ comment.id }}');
+                                                    " class="btn btn-outline-dark"> @{{ comment.name }} </a>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                {% endfor %}
+                            </div>
+                            <div id="comment_form">
+                                <!-- 评论表单 act 指向 /comment/<int: post_id>/ author={{ request.user }} post={{ post.id }} -->
+                                <form method="POST" enctype="multipart/form-data" id="comment_box"
+                                      action="{% url 'comment' t_id=post.id %}">
+                                    {% csrf_token %}
+                                    <table class="table table-borderless table-sm">
+                                        <tr>
+                                            <td></td>
+                                            <td><input type="text" name="comment_id" id="id_comment_id" value=""
+                                                       style="display: none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="comment_input" required=""
+                                                       id="id_comment_input" placeholder="请评论吧"
+                                                       style="width: 100%;height: 100%"></td>
+                                            <td>
+                                                <button type="submit" class="btn btn-outline-info"
+                                                        style="width: 100%;height: 100%">提交
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <a href="{% url 'index' %}" class="btn btn-outline-primary">返回列表</a>
+                            </div>
                         </div>
                     </div>
                 {% else %}
@@ -87,7 +143,7 @@
                             $(this).addClass('bi-heart').removeClass('bi-heart-fill');
                             $(this).data('liked', false);
                         }
-                    }.bind(this)
+                    }.bind(this),
                 });
             });
         });

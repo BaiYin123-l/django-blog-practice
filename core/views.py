@@ -81,7 +81,6 @@ class IndexView(BaseView):
         # 根据权重打乱帖子顺序
         # 使用 random.sample 按权重随机选择帖子
         posts_only = [post for post, weight in weighted_posts]
-        weights = [weight for post, weight in weighted_posts]
 
         # 随机选择帖子，权重高的帖子有更高的概率被选中
         # 使用 random.sample 确保不重复
@@ -263,6 +262,7 @@ def deregister(request):
         else:
             messages.info(request, "未登录")
             return redirect("index")
+    return None
 
 
 @method_decorator(login_required, name="dispatch")
@@ -300,8 +300,24 @@ class PostView(BaseView):
         context = self.context
         post = Post.objects.get(id=post_id)
         is_like = LikePost.objects.filter(post=post, author=request.user).exists()
+        comments = Comment.objects.filter(post=post).order_by("-id")
+        likes = LikeComment.objects.filter(author=request.user).order_by("-id")
+        comments_json = []
+        for comment in comments:
+            t_json = {
+                "id": comment.id,
+                "name":comment.author.username,
+                "avatar": comment.author.avatar.url,
+                "content": comment.content,
+                "likes": comment.likecomment_set.count(),
+                "is_like": likes.filter(comment=comment)[0].status if likes.filter(comment=comment).exists() else False,
+            }
+            comments_json.append(t_json)
         context["post"] = post
         context["is_like"] = is_like
+        context["comments"] = comments_json
+        form = CommentForm()
+        context["form"] = form
         return render(request, "read.html", context=context)
 
 from django.shortcuts import render, redirect
@@ -402,3 +418,20 @@ class LikeView(LoginRequiredMixin, View):
             like.status = not like.status
             like.save()
             return JsonResponse({"message": "Like removed" if not like.status else "Like added"})
+
+class CommentView(LoginRequiredMixin, View):
+    def post(self, request, t_id):
+        form = CommentForm(request.POST)
+        if form.is_valid():
+
+            mass = form.cleaned_data['comment_input']
+            if mass!="":
+                post_id = get_object_or_404(Post, id=t_id)
+                comment = Comment()
+                comment.post = post_id
+                comment.author = request.user
+                if form.cleaned_data['comment_id']!="":
+                    comment.content = "@" + get_object_or_404(Comment, id=form.cleaned_data['comment_id']).author.username +" "
+                comment.content += mass.strip()
+                comment.save()
+        return redirect('/post/%d' % t_id)
